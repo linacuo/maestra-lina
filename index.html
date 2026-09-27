@@ -19,7 +19,7 @@ In questo spazio raccolgo <b>materiali, attività e risorse</b> che creo e utili
 <dialog id="resourceDialog"><div class="modal"><div class="modalTop"><div><small id="crumb"></small><h3 id="modalTitle"></h3></div><button class="close" onclick="resourceDialog.close()">×</button></div><div class="resourceCols"><div class="res"><b>🔗 Risorse online</b><div id="onlineResources" class="empty">Qui troverai Kahoot, Wordwall, Genially, video e altri link.</div></div><div class="res"><b>🖨️ Materiali da stampare</b><div id="printResources" class="empty">Qui troverai schede, cartelloni e attività.</div></div></div></div></dialog>
 <dialog id="managerDialog"><div class="modal"><div class="modalTop"><div><small>AREA MAESTRA</small><h3>🔒 Gestisci sito</h3></div><button class="close" onclick="managerDialog.close()">×</button></div>
 <div id="loginPanel"><p style="color:#746864">Accedi con il tuo account Maestra Lina per aggiungere o eliminare le risorse del sito.</p><form class="formgrid" onsubmit="loginMaestra(event)"><div class="field full"><label>Email</label><input id="loginEmail" type="email" autocomplete="username" required placeholder="La tua email"></div><div class="field full"><label>Password</label><input id="loginPassword" type="password" autocomplete="current-password" required placeholder="La tua password"></div><div class="field full"><button class="saveBtn" type="submit">Accedi</button><div id="loginMessage" class="savedNote"></div></div></form></div>
-<div id="adminPanel" style="display:none"><div style="display:flex;justify-content:space-between;align-items:center;gap:12px"><p style="color:#746864;margin:8px 0">Aggiungi una risorsa scegliendo dove deve comparire.</p><button class="deleteBtn" onclick="logoutMaestra()">Esci</button></div><form id="resourceForm" class="formgrid" onsubmit="saveResource(event)"><div class="field"><label>Titolo</label><input id="fTitle" required placeholder="Es. Divisione in sillabe"></div><div class="field"><label>Disciplina</label><select id="fSubject" onchange="fillSections()"></select></div><div class="field"><label>Sezione</label><select id="fSection"></select></div><div class="field"><label>Classe</label><select id="fClass"><option value="1">Classe Prima</option><option value="2">Classe Seconda</option><option value="3" selected>Classe Terza</option><option value="4">Classe Quarta</option><option value="5">Classe Quinta</option></select></div><div class="field"><label>Tipo</label><select id="fType"><option value="online">🔗 Risorsa online</option><option value="print">🖨️ Materiale da stampare</option></select></div><div class="field"><label>Icona</label><select id="fIcon"><option>🔗</option><option>🎮</option><option>🧩</option><option>📄</option><option>✂️</option><option>🎥</option><option>🖼️</option><option>⭐</option></select></div><div class="field full"><label>Link</label><input id="fUrl" type="url" required placeholder="https://..."></div><div class="field full"><label>Breve descrizione</label><textarea id="fDesc" placeholder="Es. Gioco interattivo per esercitarsi con le sillabe"></textarea></div><div class="field full"><button class="saveBtn" type="submit">＋ Aggiungi risorsa</button><div id="saveMessage" class="savedNote">Le risorse vengono salvate online e saranno visibili anche dalla LIM.</div></div></form><div class="adminList"><b>Risorse pubblicate</b><div id="adminItems"></div></div></div></div></dialog>
+<div id="adminPanel" style="display:none"><div style="display:flex;justify-content:space-between;align-items:center;gap:12px"><p style="color:#746864;margin:8px 0">Aggiungi una risorsa scegliendo dove deve comparire.</p><button class="deleteBtn" onclick="logoutMaestra()">Esci</button></div><form id="resourceForm" class="formgrid" onsubmit="saveResource(event)"><div class="field"><label>Titolo</label><input id="fTitle" required placeholder="Es. Divisione in sillabe"></div><div class="field"><label>Disciplina</label><select id="fSubject" onchange="fillSections()"></select></div><div class="field"><label>Sezione</label><select id="fSection"></select></div><div class="field"><label>Classe</label><select id="fClass"><option value="1">Classe Prima</option><option value="2">Classe Seconda</option><option value="3" selected>Classe Terza</option><option value="4">Classe Quarta</option><option value="5">Classe Quinta</option></select></div><div class="field"><label>Tipo</label><select id="fType" onchange="toggleResourceInput()"><option value="online">🔗 Risorsa online</option><option value="print">🖨️ Materiale da stampare</option></select></div><div class="field"><label>Icona</label><select id="fIcon"><option>🔗</option><option>🎮</option><option>🧩</option><option>📄</option><option>✂️</option><option>🎥</option><option>🖼️</option><option>⭐</option></select></div><div class="field full" id="linkField"><label>Link</label><input id="fUrl" type="url" placeholder="https://..."></div><div class="field full" id="pdfField" style="display:none"><label>📎 Carica PDF</label><input id="fPdf" type="file" accept="application/pdf,.pdf"><small style="color:#746864;margin-top:6px;display:block">Scegli il PDF dal tuo computer: verrà caricato automaticamente.</small></div><div class="field full"><label>Breve descrizione</label><textarea id="fDesc" placeholder="Es. Gioco interattivo per esercitarsi con le sillabe"></textarea></div><div class="field full"><button class="saveBtn" type="submit">＋ Aggiungi risorsa</button><div id="saveMessage" class="savedNote">Le risorse vengono salvate online e saranno visibili anche dalla LIM.</div></div></form><div class="adminList"><b>Risorse pubblicate</b><div id="adminItems"></div></div></div></div></dialog>
 <footer>Fatto con ♡ per imparare, creare e crescere insieme · <b>Maestra Lina</b></footer><script>
 const SUPABASE_URL='https://jxehdsqwgcgxxbfdjnsm.supabase.co';
 const SUPABASE_PUBLISHABLE_KEY='sb_publishable_UZpmSHAuDXFaahJNsfEKrg_2NzaRbeK';
@@ -52,6 +52,13 @@ async function openClass(s,si,n){
 }
 function fillSubjects(){let s=document.getElementById('fSubject');s.innerHTML=Object.entries(names).map(([k,v])=>'<option value="'+k+'">'+v[0]+'</option>').join('');fillSections()}
 function fillSections(){let key=document.getElementById('fSubject').value||'italiano';document.getElementById('fSection').innerHTML=names[key][1].map((x,i)=>'<option value="'+i+'">'+x+'</option>').join('')}
+function toggleResourceInput(){
+ const isPrint=document.getElementById('fType').value==='print';
+ document.getElementById('linkField').style.display=isPrint?'none':'block';
+ document.getElementById('pdfField').style.display=isPrint?'block':'none';
+ document.getElementById('fUrl').required=!isPrint;
+ document.getElementById('fPdf').required=isPrint;
+}
 async function setManagerState(){
   const {data:{session}}=await db.auth.getSession();
   const logged=!!session;
@@ -69,12 +76,22 @@ async function loginMaestra(e){
 }
 async function logoutMaestra(){await db.auth.signOut();await setManagerState()}
 async function saveResource(e){
-  e.preventDefault();const btn=e.submitter; if(btn)btn.disabled=true;
-  const row={titolo:fTitle.value.trim(),disciplina:fSubject.value,sezione:String(fSection.value),classe:String(fClass.value),tipo:fType.value,descrizione:fDesc.value.trim(),link:fUrl.value.trim(),icona:fIcon.value};
-  const {error}=await db.from(TABLE).insert(row);
-  if(btn)btn.disabled=false;
-  if(error){document.getElementById('saveMessage').textContent='Errore: '+error.message;return}
-  e.target.reset();fillSubjects();document.getElementById('saveMessage').textContent='✓ Risorsa pubblicata online.';await loadResources();renderAdmin();
+ e.preventDefault();const btn=e.submitter,msg=document.getElementById('saveMessage');if(btn)btn.disabled=true;
+ let finalUrl=fUrl.value.trim();msg.textContent='Salvataggio in corso…';
+ if(fType.value==='print'){
+  const file=fPdf.files[0];
+  if(!file){msg.textContent='Scegli un PDF da caricare.';if(btn)btn.disabled=false;return}
+  const safeName=file.name.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z0-9._-]+/g,'-').replace(/-+/g,'-');
+  const path=Date.now()+'-'+safeName;
+  msg.textContent='Caricamento PDF in corso…';
+  const {error:uploadError}=await db.storage.from('materiali').upload(path,file,{cacheControl:'3600',upsert:false,contentType:'application/pdf'});
+  if(uploadError){msg.textContent='Errore nel caricamento del PDF: '+uploadError.message;if(btn)btn.disabled=false;return}
+  finalUrl=db.storage.from('materiali').getPublicUrl(path).data.publicUrl;
+ }
+ const row={titolo:fTitle.value.trim(),disciplina:fSubject.value,sezione:String(fSection.value),classe:String(fClass.value),tipo:fType.value,descrizione:fDesc.value.trim(),link:finalUrl,icona:fIcon.value};
+ const {error}=await db.from(TABLE).insert(row);
+ if(error){msg.textContent='Errore: '+error.message;if(btn)btn.disabled=false;return}
+ e.target.reset();fillSubjects();toggleResourceInput();msg.textContent='✓ Risorsa pubblicata online.';if(btn)btn.disabled=false;await loadResources();renderAdmin();
 }
 function renderAdmin(){
   let box=document.getElementById('adminItems'),all=[];Object.entries(resources).forEach(([key,b])=>['online','print'].forEach(type=>(b[type]||[]).forEach(x=>all.push({key,type,...x}))));
@@ -82,10 +99,17 @@ function renderAdmin(){
   box.innerHTML=all.map(x=>'<div class="adminItem"><span>'+esc(x.icon)+' <b>'+esc(x.title)+'</b><br><small>'+esc(x.key)+' · '+(x.type==='online'?'online':'da stampare')+'</small></span><button class="deleteBtn" onclick="deleteResource('+JSON.stringify(x.id)+')">Elimina</button></div>').join('')
 }
 async function deleteResource(id){
-  if(!confirm('Vuoi eliminare questa risorsa?'))return;
-  const {error}=await db.from(TABLE).delete().eq('id',id);
-  if(error){alert('Non è stato possibile eliminare la risorsa: '+error.message);return}
-  await loadResources();renderAdmin();
+ if(!confirm('Vuoi eliminare questa risorsa?'))return;
+ const {data:item,error:readError}=await db.from(TABLE).select('*').eq('id',id).single();
+ if(readError){alert('Non è stato possibile leggere la risorsa: '+readError.message);return}
+ const {error}=await db.from(TABLE).delete().eq('id',id);
+ if(error){alert('Non è stato possibile eliminare la risorsa: '+error.message);return}
+ if(item&&item.tipo==='print'&&item.link){
+  const marker='/storage/v1/object/public/materiali/',pos=item.link.indexOf(marker);
+  if(pos!==-1){const path=decodeURIComponent(item.link.slice(pos+marker.length));await db.storage.from('materiali').remove([path]);}
+ }
+ await loadResources();renderAdmin();
 }
+toggleResourceInput();
 loadResources();
 </script></script></body></html>
