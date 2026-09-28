@@ -389,7 +389,7 @@ nav,header,main,section,footer,.page,.memoryStrip{position:relative;z-index:1}
 
 
 /* ===== Riquadro della classe MAXI ===== */
-.modal{
+#resourceDialog .modal{
   width:98vw !important;
   max-width:1900px !important;
   box-sizing:border-box !important;
@@ -403,10 +403,10 @@ nav,header,main,section,footer,.page,.memoryStrip{position:relative;z-index:1}
 }
 .column{min-width:0 !important;width:auto !important}
 @media(min-width:1500px){
-  .modal{width:96vw !important;max-width:2000px !important}
+  #resourceDialog .modal{width:96vw !important;max-width:2000px !important}
 }
 @media(max-width:900px){
-  .modal{width:96vw !important;padding-left:20px !important;padding-right:20px !important}
+  #resourceDialog .modal{width:96vw !important;padding-left:20px !important;padding-right:20px !important}
 }
 
 
@@ -447,6 +447,34 @@ nav,header,main,section,footer,.page,.memoryStrip{position:relative;z-index:1}
 #backToTop.show{opacity:1;visibility:visible;transform:translateY(0)}
 @media(hover:hover) and (pointer:fine){#backToTop:hover{background:#f8ece9;transform:translateY(-3px)}}
 @media(max-width:650px){#backToTop{right:15px;bottom:15px;width:44px;height:44px}}
+
+/* ===== Area Maestra ripristinata ===== */
+#managerDialog{
+  width:min(980px,94vw) !important;
+  max-width:980px !important;
+  max-height:92vh !important;
+  overflow:auto !important;
+}
+#managerDialog .modal{
+  width:100% !important;
+  max-width:none !important;
+  padding:30px !important;
+  box-sizing:border-box !important;
+}
+#managerDialog .formgrid{
+  width:100% !important;
+  grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+}
+#managerDialog .field{min-width:0 !important}
+#managerDialog .field input,
+#managerDialog .field select,
+#managerDialog .field textarea{width:100% !important}
+@media(max-width:760px){
+  #managerDialog{width:96vw !important}
+  #managerDialog .modal{padding:22px !important}
+  #managerDialog .formgrid{grid-template-columns:1fr !important}
+}
+
 </style><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script></head><body>
